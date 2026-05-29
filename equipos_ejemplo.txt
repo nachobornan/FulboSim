@@ -1,0 +1,16 @@
+Boca Juniors, normal
+Real Madrid, good
+Sacachispas F.C., bad
+Manchester City, good
+A.C. Milan, normal
+Deportivo Mandarina, bad
+River Plate, normal
+Bayern Múnich, good
+Defensores de Viento, bad
+F.C. Barcelona, normal
+Poderoso Limón, bad
+Paris Saint-Germain, good
+Arsenal F.C., normal
+Atlético Colador, bad
+Juventus F.C., normal
+Troncos del Bosque, bad

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Gol 0-9 - Simulador de Fútbol Algorítmico</title>
+  <meta name="description" content="Simulador de partidos de fútbol y campeonatos basado en un algoritmo manual con números aleatorios del 0 al 9 y niveles de equipos.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Encabezado Principal -->
+    <header>
+      <div class="logo-container" id="btn-logo-home" style="cursor: pointer;">
+        <span class="logo-icon">⚽</span>
+        <div>
+          <h1>RETRO GOL 0-9</h1>
+          <div class="logo-sub">Algorithmic Simulator</div>
+        </div>
+      </div>
+      <nav class="btn-group">
+        <button class="btn btn-outline" id="nav-home">Inicio</button>
+        <button class="btn btn-outline" id="nav-single">Partido Único</button>
+        <button class="btn btn-outline" id="nav-liga">Liga</button>
+        <button class="btn btn-outline" id="nav-copa">Copa / Mundial</button>
+        <button class="btn btn-outline" id="nav-rules">Reglas</button>
+      </nav>
+    </header>
+
+    <!-- VISTA: MENÚ PRINCIPAL -->
+    <section id="view-menu" class="view active">
+      <div class="card text-center mb-2" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));">
+        <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">¡Bienvenido al simulador de tu infancia!</h2>
+        <p style="max-width: 700px; margin: 0 auto; color: var(--text-muted);">
+          Simula partidos y campeonatos completos utilizando el algoritmo matemático basado en la generación de 20 números aleatorios del 0 al 9. ¡Arma fixtures de ligas de hasta 20 equipos o desafía la Copa del Mundo en fase de grupos y eliminación directa!
+        </p>
+      </div>
+
+      <div class="menu-grid">
+        <div class="card menu-card" id="menu-btn-single">
+          <div>
+            <div class="menu-icon">⚔️</div>
+            <h3>Partido Individual</h3>
+            <p>Enfréntate en un único partido configurando los nombres de los equipos y sus niveles (Bueno, Normal o Malo).</p>
+          </div>
+          <button class="btn btn-primary mt-2">Jugar Partido</button>
+        </div>
+
+        <div class="card menu-card" id="menu-btn-liga">
+          <div>
+            <div class="menu-icon">🏆</div>
+            <h3>Liga (Round Robin)</h3>
+            <p>Arma un torneo de todos contra todos con hasta 20 equipos. Soporta ruedas de ida y vuelta balanceadas y exportación de reportes.</p>
+          </div>
+          <button class="btn btn-primary mt-2">Crear Liga</button>
+        </div>
+
+        <div class="card menu-card" id="menu-btn-copa">
+          <div>
+            <div class="menu-icon">👑</div>
+            <h3>Copa / Mundial</h3>
+            <p>Configura un torneo de 16 o 32 equipos. Disputa fases de grupos e intensas llaves de eliminación a ida y vuelta con tanda de penales.</p>
+          </div>
+          <button class="btn btn-primary mt-2">Crear Copa</button>
+        </div>
+
+        <div class="card menu-card" id="menu-btn-rules">
+          <div>
+            <div class="menu-icon">📋</div>
+            <h3>Reglas del Algoritmo</h3>
+            <p>Revisa la matriz de diferencias de goles basadas en la relación de niveles entre atacantes y defensores.</p>
+          </div>
+          <button class="btn btn-outline mt-2">Ver Matriz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: PARTIDO INDIVIDUAL - CONFIGURACIÓN -->
+    <section id="view-single-setup" class="view">
+      <div class="card setup-box">
+        <h2 class="mb-2" style="font-weight: 700;">Configurar Partido Único</h2>
+        <p class="text-muted mb-2">Ingresa los nombres de los equipos y selecciona su categoría competitiva.</p>
+        
+        <div class="form-group">
+          <h4 style="margin-bottom: 0.5rem; color: var(--color-primary);">Equipo Local</h4>
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+            <input type="text" id="single-local-name" class="form-control" value="Deportivo Local">
+            <select id="single-local-level" class="form-control">
+              <option value="good">Bueno (B)</option>
+              <option value="normal" selected>Normal (N)</option>
+              <option value="bad">Malo (M)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h4 style="margin-bottom: 0.5rem; color: var(--color-info);">Equipo Visitante</h4>
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+            <input type="text" id="single-visitor-name" class="form-control" value="Atlético Visitante">
+            <select id="single-visitor-level" class="form-control">
+              <option value="good">Bueno (B)</option>
+              <option value="normal" selected>Normal (N)</option>
+              <option value="bad">Malo (M)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block mt-2" id="btn-start-single" style="width: 100%;">Iniciar Partido</button>
+      </div>
+    </section>
+
+    <!-- VISTA: PARTIDO INDIVIDUAL - SIMULACIÓN -->
+    <section id="view-single-sim" class="view">
+      <!-- Marcador LED -->
+      <div class="scoreboard">
+        <div class="scoreboard-header">
+          <span>MINUTO A MINUTO</span>
+          <span id="scoreboard-status-lbl">NO INICIADO</span>
+        </div>
+        <div class="scoreboard-body">
+          <div class="scoreboard-team">
+            <span class="team-display-name" id="board-local-name">LOCAL</span>
+            <span class="team-level-tag normal" id="board-local-level">NORMAL (N)</span>
+          </div>
+          <div class="scoreboard-scores">
+            <span class="score-digit" id="board-local-score">0</span>
+            <span class="scoreboard-time-container">
+              <span class="score-colon">:</span>
+              <span class="match-time" id="board-time-display">0'</span>
+            </span>
+            <span class="score-digit" id="board-visitor-score">0</span>
+          </div>
+          <div class="scoreboard-team">
+            <span class="team-display-name" id="board-visitor-name">VISITANTE</span>
+            <span class="team-level-tag normal" id="board-visitor-level">NORMAL (N)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor Principal de Simulación -->
+      <div class="sim-container">
+        <!-- Izquierda: Registro del partido -->
+        <div class="card d-flex" style="flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 class="mb-2">Desarrollo del Partido</h3>
+            <div id="single-match-log" class="match-log">
+              <div style="color: var(--text-muted); text-align: center; padding: 2rem;">El partido está listo. Presiona un botón para simular.</div>
+            </div>
+          </div>
+          <div class="btn-group mt-3" style="justify-content: center;">
+            <button class="btn btn-outline" id="btn-sim-step">Simular Jugada</button>
+            <button class="btn btn-primary" id="btn-sim-fast">Simulación Rápida</button>
+            <button class="btn" id="btn-reset-single">Reiniciar / Cambiar Equipos</button>
+          </div>
+        </div>
+
+        <!-- Derecha: Lanzador de Dados/Números -->
+        <div class="dice-roller-box">
+          <h3 style="font-weight: 700;">Tirada de Números</h3>
+          <p class="text-muted" style="font-size: 0.85rem;" id="dice-instruction">Presiona para simular las jugadas</p>
+          <div class="dice-container">
+            <div>
+              <div class="die local" id="die-local">-</div>
+              <div class="die-label">Local</div>
+            </div>
+            <div>
+              <div class="die visitor" id="die-visitor">-</div>
+              <div class="die-label">Visitante</div>
+            </div>
+          </div>
+          <div class="dice-result-indicator" id="dice-result-lbl"></div>
+          <!-- Posesión de Pelota -->
+          <div class="possession-container" style="width: 100%; margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 1rem;">
+            <div class="d-flex justify-between" style="font-size: 0.8rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">
+              <span>POSESIÓN LOC: <span id="possession-local-lbl">50</span>%</span>
+              <span>POSESIÓN VIS: <span id="possession-visitor-lbl">50</span>%</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: var(--color-info); border-radius: 4px; overflow: hidden; display: flex;">
+              <div id="possession-local-bar" style="width: 50%; height: 100%; background: var(--color-primary); transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: LIGA - CONFIGURACIÓN -->
+    <section id="view-liga-setup" class="view">
+      <div class="card setup-box" style="max-width: 800px;">
+        <h2 class="mb-2">Configurar Nueva Liga</h2>
+        <p class="text-muted mb-2">Selecciona el número de equipos participantes, define sus nombres y niveles. Nosotros te proveemos una lista base balanceada por defecto.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="mb-2">
+          <div class="form-group">
+            <label for="liga-teams-count">Cantidad de Equipos</label>
+            <select id="liga-teams-count" class="form-control">
+              <option value="4">4 Equipos</option>
+              <option value="6">6 Equipos</option>
+              <option value="8" selected>8 Equipos</option>
+              <option value="10">10 Equipos</option>
+              <option value="12">12 Equipos</option>
+              <option value="16">16 Equipos</option>
+              <option value="20">20 Equipos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="liga-type">Formato del Torneo</label>
+            <select id="liga-type" class="form-control">
+              <option value="single">Solo Ida (Rueda Única)</option>
+              <option value="double" selected>Ida y Vuelta (Doble Rueda)</option>
+            </select>
+          </div>
+        </div>
+
+        <h3 class="mb-2" style="font-size: 1.1rem; color: var(--color-primary);">Listado de Equipos</h3>
+        <div class="teams-list-setup" id="liga-teams-setup-list">
+          <!-- Rellenado dinámicamente mediante JS -->
+        </div>
+
+        <div class="btn-group" style="justify-content: flex-end;">
+          <button class="btn btn-outline" id="btn-liga-import-trigger">📂 Importar Equipos</button>
+          <input type="file" id="input-liga-file" accept=".txt" style="display: none;">
+          <button class="btn btn-outline" id="btn-liga-load-trigger">📂 Cargar Partida</button>
+          <input type="file" id="input-liga-savefile" accept=".json" style="display: none;">
+          <button class="btn" id="btn-liga-randomize-levels">Aleatorizar Niveles</button>
+          <button class="btn btn-primary" id="btn-start-liga">Generar Fixture y Empezar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: LIGA - PANEL DE SIMULACIÓN -->
+    <section id="view-liga-sim" class="view">
+      <div class="sim-controls-panel">
+        <div class="progress-info">
+          <span class="progress-info-title">Torneo</span>
+          <span class="progress-info-val" id="liga-title-display">Liga de 8 Equipos</span>
+        </div>
+        <div class="progress-info">
+          <span class="progress-info-title">Progreso</span>
+          <span class="progress-info-val" id="liga-progress-display">Fecha 0 de 14</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline" id="btn-liga-sim-match">Simular Siguiente Partido</button>
+          <button class="btn btn-outline" id="btn-liga-sim-round">Simular Fecha Completa</button>
+          <button class="btn btn-primary" id="btn-liga-sim-all">Simular Todo el Torneo</button>
+          <button class="btn btn-accent" id="btn-liga-save">💾 Guardar Partida</button>
+          <button class="btn btn-accent" id="btn-liga-export" disabled>Descargar Reporte</button>
+          <button class="btn btn-danger" id="btn-liga-reset">Abandonar Liga</button>
+        </div>
+      </div>
+
+      <div class="sim-container" style="grid-template-columns: 1fr;">
+        <!-- Fila de tablas -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;" id="liga-tables-grid">
+          <!-- Izquierda: Fixture / Fechas -->
+          <div>
+            <div class="fixture-header">
+              <h3 id="liga-round-title">Fecha 1</h3>
+              <div class="btn-group">
+                <button class="btn btn-outline" style="padding: 0.35rem 0.75rem;" id="btn-liga-prev-round">◀</button>
+                <button class="btn btn-outline" style="padding: 0.35rem 0.75rem;" id="btn-liga-next-round">▶</button>
+              </div>
+            </div>
+            <div class="fixture-matches" id="liga-matches-container">
+              <!-- Rellenado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Derecha: Tabla de Posiciones -->
+          <div>
+            <h3 class="mb-2">Tabla de Posiciones</h3>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Pos</th>
+                    <th>Equipo</th>
+                    <th style="width: 60px;">Nivel</th>
+                    <th style="width: 45px;" class="txt-center">PTS</th>
+                    <th style="width: 40px;" class="txt-center">PJ</th>
+                    <th style="width: 40px;" class="txt-center">PG</th>
+                    <th style="width: 40px;" class="txt-center">PE</th>
+                    <th style="width: 40px;" class="txt-center">PP</th>
+                    <th style="width: 45px;" class="txt-center">GF</th>
+                    <th style="width: 45px;" class="txt-center">GC</th>
+                    <th style="width: 45px;" class="txt-center">DG</th>
+                  </tr>
+                </thead>
+                <tbody id="liga-table-body">
+                  <!-- Rellenado dinámicamente -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: COPA - CONFIGURACIÓN -->
+    <section id="view-copa-setup" class="view">
+      <div class="card setup-box" style="max-width: 800px;">
+        <h2 class="mb-2">Configurar Copa Mundial</h2>
+        <p class="text-muted mb-2">Elige entre 16 o 32 equipos. Competirán en una Fase de Grupos de 4 integrantes para luego pasar a Play-offs de eliminación directa.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;" class="mb-2">
+          <div class="form-group">
+            <label for="copa-teams-count">Equipos Totales</label>
+            <select id="copa-teams-count" class="form-control">
+              <option value="16" selected>16 Equipos (4 grupos)</option>
+              <option value="32">32 Equipos (8 grupos)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="copa-group-format">Fase de Grupos</label>
+            <select id="copa-group-format" class="form-control">
+              <option value="single" selected>Solo Ida (3 partidos)</option>
+              <option value="double">Ida y Vuelta (6 partidos)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="copa-knockout-format">Fase Eliminatoria</label>
+            <select id="copa-knockout-format" class="form-control">
+              <option value="single">Partido Único</option>
+              <option value="double" selected>Ida y Vuelta (Global)</option>
+            </select>
+          </div>
+        </div>
+
+        <h3 class="mb-2" style="font-size: 1.1rem; color: var(--color-primary);">Listado de Equipos</h3>
+        <div class="teams-list-setup" id="copa-teams-setup-list">
+          <!-- Rellenado dinámicamente mediante JS -->
+        </div>
+
+        <div class="btn-group" style="justify-content: flex-end;">
+          <button class="btn btn-outline" id="btn-copa-import-trigger">📂 Importar Equipos</button>
+          <input type="file" id="input-copa-file" accept=".txt" style="display: none;">
+          <button class="btn btn-outline" id="btn-copa-load-trigger">📂 Cargar Partida</button>
+          <input type="file" id="input-copa-savefile" accept=".json" style="display: none;">
+          <button class="btn" id="btn-copa-randomize-levels">Aleatorizar Niveles</button>
+          <button class="btn btn-primary" id="btn-start-copa">Crear Copa y Fixture</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: COPA - PANEL DE SIMULACIÓN -->
+    <section id="view-copa-sim" class="view">
+      <div class="sim-controls-panel">
+        <div class="progress-info">
+          <span class="progress-info-title">Torneo</span>
+          <span class="progress-info-val" id="copa-title-display">Copa de 16 Equipos</span>
+        </div>
+        <div class="progress-info">
+          <span class="progress-info-title">Fase Actual</span>
+          <span class="progress-info-val" id="copa-phase-display">Fase de Grupos</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline" id="btn-copa-sim-match">Simular Partido</button>
+          <button class="btn btn-outline" id="btn-copa-sim-round">Simular Fecha / Llave</button>
+          <button class="btn btn-primary" id="btn-copa-sim-all">Simular Copa Completa</button>
+          <button class="btn btn-accent" id="btn-copa-save">💾 Guardar Partida</button>
+          <button class="btn btn-accent" id="btn-copa-export" disabled>Descargar Reporte</button>
+          <button class="btn btn-danger" id="btn-copa-reset">Abandonar Copa</button>
+        </div>
+      </div>
+
+      <!-- Pestañas de Vista para la Copa (Grupos vs Play-offs) -->
+      <div class="btn-group mb-2" style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+        <button class="btn btn-primary" id="btn-copa-tab-groups">Fase de Grupos</button>
+        <button class="btn btn-outline" id="btn-copa-tab-knockout">Playoffs / Llaves</button>
+      </div>
+
+      <!-- Subvista: Grupos de la Copa -->
+      <div id="copa-subview-groups" class="copa-tab-content">
+        <div class="groups-grid" id="copa-groups-container">
+          <!-- Rellenado dinámicamente con las tablas de los grupos -->
+        </div>
+
+        <h3 class="mb-2" id="copa-group-round-title">Partidos - Grupo A (Fecha 1)</h3>
+        <div class="fixture-matches mb-2" id="copa-group-matches-container">
+          <!-- Partidos de la fecha seleccionada en grupos -->
+        </div>
+      </div>
+
+      <!-- Subvista: Llaves (Playoffs) -->
+      <div id="copa-subview-knockout" class="copa-tab-content" style="display: none;">
+        <div class="bracket-container" id="copa-bracket-container">
+          <!-- Rellenado dinámicamente con el árbol de la eliminatoria -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA: REGLAS DEL ALGORITMO -->
+    <section id="view-rules" class="view">
+      <div class="card">
+        <h2 class="mb-2" style="font-weight: 700; color: var(--color-primary);">El Algoritmo de Simulación Manual</h2>
+        <p class="mb-2">
+          Esta aplicación implementa exactamente la mecánica clásica basada en lanzamientos aleatorios.
+        </p>
+
+        <h3 class="mt-2 mb-2" style="font-size: 1.25rem;">1. Estructura de un Partido</h3>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li>Se generan <strong>20 números aleatorios</strong> comprendidos entre 0 y 9.</li>
+          <li>Los 10 primeros números forman el <strong>Primer Tiempo</strong>, y los 10 siguientes el <strong>Segundo Tiempo</strong>.</li>
+          <li>Los números generados en orden <strong>impar</strong> (1º, 3º, 5º...) corresponden al tiro/ataque del <strong>Local</strong>.</li>
+          <li>Los números generados en orden <strong>par</strong> (2º, 4º, 6º...) corresponden al tiro/ataque del <strong>Visitante</strong>.</li>
+          <li>Se forman <strong>10 instancias o jugadas de gol</strong> emparejando secuencialmente un tiro local con un tiro visitante.</li>
+        </ul>
+
+        <h3 class="mb-2" style="font-size: 1.25rem;">2. Matriz de Niveles e Incidencia en el Gol</h3>
+        <p class="mb-2">
+          Dependiendo de la combinación de nivel del equipo atacante (Local o Visitante) y del equipo defensor, se requiere una <strong>diferencia mínima</strong> a favor en el par para que la jugada se compute como gol:
+        </p>
+
+        <div class="table-container rules-matrix">
+          <table>
+            <thead>
+              <tr>
+                <th>Atacante \ Defensor</th>
+                <th class="txt-center">Bueno (B)</th>
+                <th class="txt-center">Normal (N)</th>
+                <th class="txt-center">Malo (M)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="txt-bold">Bueno (B)</td>
+                <td class="txt-center matrix-cell-match">≥ 5</td>
+                <td class="txt-center matrix-cell-easy">≥ 5</td>
+                <td class="txt-center matrix-cell-easy">≥ 4</td>
+              </tr>
+              <tr>
+                <td class="txt-bold">Normal (N)</td>
+                <td class="txt-center matrix-cell-hard">≥ 6</td>
+                <td class="txt-center matrix-cell-match">≥ 5</td>
+                <td class="txt-center matrix-cell-easy">≥ 4</td>
+              </tr>
+              <tr>
+                <td class="txt-bold">Malo (M)</td>
+                <td class="txt-center matrix-cell-hard">≥ 6</td>
+                <td class="txt-center matrix-cell-hard">≥ 5</td>
+                <td class="txt-center matrix-cell-match">≥ 5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="background: rgba(251, 191, 36, 0.05); border-color: rgba(251, 191, 36, 0.2); margin-top: 1rem;">
+          <h4 style="color: var(--color-accent); margin-bottom: 0.25rem;">Reglas de Oro:</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">
+            • Si la diferencia a favor de la parte atacante es **igual o mayor** al valor requerido en la matriz, es gol.<br>
+            • **El Factor 6:** Una diferencia de 6 o más en una jugada representa gol garantizado bajo cualquier circunstancia. Por ello, el equipo malo puede hacer goles frente a los buenos obteniendo una diferencia de 6 en su par.<br>
+            • Equipos del mismo nivel competitivos requieren una diferencia mínima de 5 para anotarse un gol.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL: TANDA DE PENALES INTERACTIVA -->
+    <div class="modal-overlay" id="penalty-modal">
+      <div class="modal-content">
+        <h2 style="color: var(--color-accent); font-weight: 800; margin-bottom: 0.5rem;">TANDA DE PENALES</h2>
+        <p class="text-muted" style="font-size: 0.9rem;" id="penalty-teams-title">Local vs Visitante</p>
+        
+        <div class="penalty-arena">
+          <!-- Marcador LED de Penales -->
+          <div class="scoreboard" style="padding: 0.75rem 1.5rem; max-width: 100%; border-width: 2px; margin-bottom: 1rem;">
+            <div class="scoreboard-body" style="grid-template-columns: 1fr auto 1fr;">
+              <span class="txt-bold text-center" id="penalty-local-name">LOC</span>
+              <span style="font-size: 1.75rem; font-weight: bold; color: var(--color-danger); padding: 0 1rem;" id="penalty-score-display">0 - 0</span>
+              <span class="txt-bold text-center" id="penalty-visitor-name">VIS</span>
+            </div>
+          </div>
+
+          <!-- Puntos visuales de acierto/fallo -->
+          <div>
+            <div class="penalty-dots" id="penalty-local-dots" style="margin-bottom: 0.5rem;">
+              <!-- Círculos para local -->
+            </div>
+            <div class="penalty-dots" id="penalty-visitor-dots">
+              <!-- Círculos para visitante -->
+            </div>
+          </div>
+
+          <!-- Lanzamiento en vivo -->
+          <div class="dice-container" style="gap: 1.5rem; scale: 0.9; margin: 0.5rem 0;">
+            <div>
+              <div class="die local" id="penalty-die-pateador">-</div>
+              <div class="die-label" id="penalty-label-pateador">Pateador</div>
+            </div>
+            <div>
+              <div class="die visitor" id="penalty-die-arquero">-</div>
+              <div class="die-label" id="penalty-label-arquero">Arquero</div>
+            </div>
+          </div>
+
+          <div class="dice-result-indicator" id="penalty-result-lbl" style="font-size: 0.95rem; min-height: 1.2rem;"></div>
+        </div>
+
+        <div class="btn-group" style="justify-content: center;">
+          <button class="btn btn-primary" id="btn-penalty-kick">Ejecutar Tiro</button>
+          <button class="btn btn-outline" id="btn-penalty-auto" style="display: none;">Resolver Tanda Rápida</button>
+          <button class="btn btn-primary" id="btn-penalty-close" style="display: none;">Confirmar Resultado</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer>
+      RETRO GOL 0-9 — Desarrollado en dupla de pair programming. &copy; 2026.
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
