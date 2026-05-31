@@ -120,6 +120,25 @@ const MATCH_COMMENTARIES = {
   ]
 };
 
+const PENALTY_COMMENTARIES = {
+  goal: [
+    "Fusiló al centro del arco con potencia ineludible.",
+    "Acomodó la pelota suavemente junto a la base del poste.",
+    "Engañó por completo al arquero, que voló hacia el otro poste.",
+    "Remate cruzado y a media altura, inalcanzable para el portero.",
+    "Le pegó con tres dedos y la clavó cerca del ángulo.",
+    "Disparo seco y rasante que entra pegado a la red lateral."
+  ],
+  miss: [
+    "¡Espectacular volada del arquero sobre su derecha para desviar el balón!",
+    "¡Atajada magnífica abajo! El arquero adivinó la intención y contuvo con dos manos.",
+    "¡Desviado! Quiso ajustar tanto el remate que la pelota se fue ancha.",
+    "¡El remate pega en el poste y sale despedido lejos del arco!",
+    "¡Al travesaño! El bombazo sacudió el arco y se fue a la tribuna.",
+    "¡Arquero! Deja el pie plantado y bloquea el disparo directo al medio."
+  ]
+};
+
 // --- ESTADOS DE LA APLICACIÓN ---
 let activeView = "view-menu";
 
@@ -2422,14 +2441,18 @@ function executePenaltyDecision() {
   const localTurn = penaltyState.teamTurn === "local";
   const labelResult = document.getElementById("penalty-result-lbl");
   
+  const comment = isGoal 
+    ? PENALTY_COMMENTARIES.goal[Math.floor(Math.random() * PENALTY_COMMENTARIES.goal.length)]
+    : PENALTY_COMMENTARIES.miss[Math.floor(Math.random() * PENALTY_COMMENTARIES.miss.length)];
+  
   if (localTurn) {
     penaltyState.localKicks.push(isGoal);
     if (isGoal) {
       penaltyState.localScore++;
-      labelResult.innerText = `⚽ ¡GOL! ${penaltyState.local.name} anotó (Diferencia de ${diff})`;
+      labelResult.innerText = `⚽ ¡GOL de ${penaltyState.local.name}! ${comment} (${pVal}-${aVal})`;
       labelResult.style.color = "var(--color-primary)";
     } else {
-      labelResult.innerText = `❌ ¡ATAJADA! El arquero contuvo el tiro de ${penaltyState.local.name}`;
+      labelResult.innerText = `❌ ¡FALLÓ ${penaltyState.local.name}! ${comment} (${pVal}-${aVal})`;
       labelResult.style.color = "var(--color-danger)";
     }
     updatePenaltyDots("local", penaltyState.localKicks);
@@ -2438,10 +2461,10 @@ function executePenaltyDecision() {
     penaltyState.visitorKicks.push(isGoal);
     if (isGoal) {
       penaltyState.visitorScore++;
-      labelResult.innerText = `⚽ ¡GOL! ${penaltyState.visitor.name} anotó (Diferencia de ${diff})`;
+      labelResult.innerText = `⚽ ¡GOL de ${penaltyState.visitor.name}! ${comment} (${pVal}-${aVal})`;
       labelResult.style.color = "var(--color-info)";
     } else {
-      labelResult.innerText = `❌ ¡ATAJADA! El arquero contuvo el tiro de ${penaltyState.visitor.name}`;
+      labelResult.innerText = `❌ ¡FALLÓ ${penaltyState.visitor.name}! ${comment} (${pVal}-${aVal})`;
       labelResult.style.color = "var(--color-danger)";
     }
     updatePenaltyDots("visitor", penaltyState.visitorKicks);
