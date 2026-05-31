@@ -845,6 +845,8 @@ function applyTournamentMatchResult() {
 
       if (copaState.currentRound >= copaState.groupFixture.length) {
         generateKnockoutPhases();
+      } else {
+        displayedCopaGroupRound = copaState.currentRound;
       }
     }
 
@@ -1547,6 +1549,8 @@ function setupCopa() {
   document.getElementById("btn-copa-sim-all").addEventListener("click", simulateAllCopa);
   document.getElementById("btn-copa-reset").addEventListener("click", () => switchView("view-menu"));
   document.getElementById("btn-copa-export").addEventListener("click", exportCopaReport);
+  document.getElementById("btn-copa-prev-round").addEventListener("click", () => navigateCopaGroupRound(-1));
+  document.getElementById("btn-copa-next-round").addEventListener("click", () => navigateCopaGroupRound(1));
 
   // Guardado y carga
   const saveBtn = document.getElementById("btn-copa-save");
@@ -1849,6 +1853,13 @@ function renderCopaGroupRound(roundIdx) {
   });
 }
 
+function navigateCopaGroupRound(direction) {
+  const target = displayedCopaGroupRound + direction;
+  if (target >= 0 && target < copaState.groupFixture.length) {
+    renderCopaGroupRound(target);
+  }
+}
+
 // Simulación interactiva / paso a paso de la copa
 function simulateNextCopaMatch() {
   if (copaState.currentPhase === "finished") return;
@@ -1888,6 +1899,8 @@ function simulateNextCopaGroupMatch() {
     if (copaState.currentRound >= copaState.groupFixture.length) {
       // Fase de grupos completada. Generar Octavos o Cuartos.
       generateKnockoutPhases();
+    } else {
+      displayedCopaGroupRound = copaState.currentRound;
     }
   }
 

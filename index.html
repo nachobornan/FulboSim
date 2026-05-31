@@ -371,13 +371,22 @@
 
       <!-- Subvista: Grupos de la Copa -->
       <div id="copa-subview-groups" class="copa-tab-content">
-        <div class="groups-grid" id="copa-groups-container">
-          <!-- Rellenado dinámicamente con las tablas de los grupos -->
+        <!-- Partidos al principio, cerca de los controles -->
+        <div class="fixture-header">
+          <h3 id="copa-group-round-title">Partidos - Fecha 1</h3>
+          <div class="btn-group">
+            <button class="btn btn-outline" style="padding: 0.35rem 0.75rem;" id="btn-copa-prev-round">◀</button>
+            <button class="btn btn-outline" style="padding: 0.35rem 0.75rem;" id="btn-copa-next-round">▶</button>
+          </div>
+        </div>
+        <div class="fixture-matches mb-3" id="copa-group-matches-container">
+          <!-- Partidos de la fecha seleccionada en grupos -->
         </div>
 
-        <h3 class="mb-2" id="copa-group-round-title">Partidos - Grupo A (Fecha 1)</h3>
-        <div class="fixture-matches mb-2" id="copa-group-matches-container">
-          <!-- Partidos de la fecha seleccionada en grupos -->
+        <!-- Tablas de posiciones al final -->
+        <h3 class="mb-2">Tablas de Posiciones</h3>
+        <div class="groups-grid" id="copa-groups-container">
+          <!-- Rellenado dinámicamente con las tablas de los grupos -->
         </div>
       </div>
 
