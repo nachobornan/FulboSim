@@ -1977,7 +1977,7 @@ function generateKnockoutPhases() {
 }
 
 function createKnockoutPair(team1, team2, id) {
-  const doubleLeg = copaState.knockoutFormat === "double";
+  const doubleLeg = id.startsWith("F") ? false : (copaState.knockoutFormat === "double");
   return {
     id,
     team1,
@@ -2221,7 +2221,7 @@ function renderKnockoutBracket() {
         let scoreText2 = "-";
         
         if (p.match1.played) {
-          if (copaState.knockoutFormat === "double") {
+          if (p.match2) {
             const m2Text = p.match2.played ? ` / ${p.match2.awayScore}` : " / -";
             scoreText1 = `${p.match1.homeScore}${m2Text}`;
             scoreText2 = `${p.match1.awayScore}${p.match2.played ? ` / ${p.match2.homeScore}` : " / -"}`;
@@ -2236,7 +2236,7 @@ function renderKnockoutBracket() {
             }
           } else {
             const penaltyIndicator = p.penaltyWinner 
-              ? ` (${p.penaltyWinner.id === p.team1.id ? 'Pen.' : ''})` 
+              ? ` (${p.penaltyWinner.id === p.team1.id ? 'Pen. G' : 'Pen. P'})` 
               : "";
             scoreText1 = `${p.match1.homeScore}${p.winner && p.winner.id === p.team1.id ? penaltyIndicator : ""}`;
             scoreText2 = `${p.match1.awayScore}${p.winner && p.winner.id === p.team2.id ? penaltyIndicator : ""}`;
@@ -2245,7 +2245,7 @@ function renderKnockoutBracket() {
 
         let actionBtnHtml = "";
         if (isCurrent && !p.winner) {
-          const labelBtn = !p.match1.played ? "📺 Ver Ida" : "📺 Ver Vuelta";
+          const labelBtn = !p.match2 ? "📺 Ver en Vivo" : (!p.match1.played ? "📺 Ver Ida" : "📺 Ver Vuelta");
           actionBtnHtml = `
             <div class="text-center" style="margin-top: 0.5rem; border-top: 1px dashed var(--border-color); padding-top: 0.5rem;">
               <button class="btn btn-primary" style="padding: 2px 10px; font-size: 0.7rem; width: 100%;" onclick="playCopaKnockoutMatchInteractive()">
