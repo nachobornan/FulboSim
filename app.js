@@ -48,7 +48,12 @@ const MATCH_COMMENTARIES = {
     "Lucha intensa por el balón en el centro de la cancha, sin dominador claro.",
     "El mediocampo es un embudo; ambos equipos dividen constantemente el esférico.",
     "Juego trabado por reiteradas infracciones tácticas en la mitad del terreno.",
-    "Se lucha centímetro a centímetro. Pelota dividida y pierna fuerte en el círculo central."
+    "Se lucha centímetro a centímetro. Pelota dividida y pierna fuerte en el círculo central.",
+    "No pueden mantener el balón; se lo van regalando uno a otro.",
+    "No pueden encontrar el pase entre líneas; imposible pisar el área rival.",
+    "Partido planchado, faltan ideas para abrir el juego.",
+    "Poco fútbol y muchas patadas. Se nota la tensión.",
+    "Se impacienta la gente porque no pueden pasar mitad de cancha."
   ],
   very_far: [
     "Un despeje defectuoso que cruza todo el lateral sin destino.",
@@ -56,7 +61,12 @@ const MATCH_COMMENTARIES = {
     "Pase en profundidad demasiado largo que se pierde por la línea de fondo.",
     "El partido se torna chato y predecible; no logran romper las líneas.",
     "Intento de centro que sale defectuoso y termina en el techo del arco.",
-    "La defensa se para firme y corta el ataque sin hacer ningún esfuerzo."
+    "La defensa se para firme y corta el ataque sin hacer ningún esfuerzo.",
+    "Remató cómodo pero la mandó a las estrellas.",
+    "Centro a la nada misma; la pelota queda dormida en el área.",
+    "La defensa responde cómoda ante los intentos inofensivos del rival.",
+    "Se acercan al área y pierden la pelota; así va a ser difícil.",
+    "Prueba de lejos sin fuerzas ante la falta de ideas."
   ],
   medium_far: [
     "Disparo de media distancia que el portero controla en dos tiempos.",
@@ -64,28 +74,49 @@ const MATCH_COMMENTARIES = {
     "El delantero ensaya una volea incómoda que sale suave a las manos del arquero.",
     "Cruce defensivo oportuno para mandar el balón al tiro de esquina.",
     "Remate cruzado desde el borde del área que se va ancho del poste izquierdo.",
-    "El arquero sale con decisión y corta con los puños un envío aéreo peligroso."
+    "El arquero sale con decisión y corta con los puños un envío aéreo peligroso.",
+    "El arquero se anticipa y se queda con la pelota.",
+    "Faltó comba; el tiro pasa cerca pero recto al lado del palo.",
+    "Le quedó muy incómoda pero sacó un remate que sirve como advertencia.",
+    "Cabecea solo pero le faltó dirección.",
+    "Buen tiro pero el arquero estaba parado en el lugar correcto.",
+    "Se quedó sin ángulo para la definición; bien contenido por la defensa."
   ],
   casi_gol: [
     "¡UYYYY! ¡El bombazo pega en el palo y la pelota recorre toda la línea de gol!",
     "¡Espectacular volada del arquero para desviar al córner un remate con destino de gol!",
     "¡Increíble! El delantero define perfecto ante la salida del arquero y el defensa la saca de la línea.",
     "¡Se salvó de milagro! El remate cruzado roza la base del poste y se va afuera.",
-    "¡Al travesaño! Un cabezazo fulminante que hace temblar el arco."
+    "¡Al travesaño! Un cabezazo fulminante que hace temblar el arco.",
+    "¡El travesaño salva al arquero que voló justo!",
+    "¡Abajo y esquinado. El arquero llega a sacarla con las uñas!",
+    "Tenía que empujarla pero le quiso romper el arco. ¡Increíble!",
+    "Tras un grosero error de la defensa se salvan de casualidad.",
+    "¡GOOOOL... uhhh! Se movió la red y lo gritó todo el mundo, pero no fue."
   ],
   gol_justo: [
     "¡GOL! Definición sutil por bajo, abriendo el pie ante la salida rápida del arquero.",
     "¡GOL! El delantero se desmarca de forma impecable y remata cruzado para romper la paridad.",
     "¡GOL! Tras una serie de rebotes en el área chica, el atacante la empuja al fondo de la red.",
     "¡GOL! Remate potente y esquinado que entra tras rozar la base del vertical.",
-    "¡GOL! Sorprende a la defensa dormida tras un tiro de esquina ejecutado con rapidez."
+    "¡GOL! Sorprende a la defensa dormida tras un tiro de esquina ejecutado con rapidez.",
+    "¡GOL! Error defensivo que el delantero supo aprovechar.",
+    "¡GOL! Cabezazo y gol. Qué simple que es el fútbol.",
+    "¡GOL! Aprovecha el rebote del arquero y adentro.",
+    "¡GOL! La pica ante la salida del arquero.",
+    "¡GOL! Tiro libre que se mete por una barrera mal armada."
   ],
   golazo: [
     "¡GOLAZO! ¡Qué locura de gol! Clava la pelota en el ángulo de volea.",
     "¡GOLAZO! Deja desparramado al arquero con un regate fantástico y define a puerta vacía.",
     "¡GOLAZO! Un contragolpe meteórico de área a área que termina con una vaselina magistral.",
     "¡GOLAZO! Remate de media distancia con tres dedos que agarra una comba espectacular.",
-    "¡GOLAZO! Elude a dos defensores en velocidad y la cuelga del ángulo más difícil del arco."
+    "¡GOLAZO! Elude a dos defensores en velocidad y la cuelga del ángulo más difícil del arco.",
+    "¡GOLAZO! De afuera del área para inflar la red.",
+    "¡GOLAZO! Tiene ojos en la nuca; un gol de crack.",
+    "¡GOLAZO! Travesaño y adentro; cabezazo dificilísimo.",
+    "¡GOLAZO! A pura gambeta adentro del área.",
+    "¡GOLAZO! La para de pecho y volea. A estos tipos no les podés dar esos regalos."
   ]
 };
 
